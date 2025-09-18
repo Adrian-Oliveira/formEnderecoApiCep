@@ -1,36 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-      </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-{/* lasjdfladjjjjjjjj 
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <form action="" className="endereco">
+        <input type="text" className="inputText" id="cep" />
+        <input type="text" className="inputText" id="pais"/>
+        <input type="text" className="inputText" id="estado"/>
+        <input type="text" className="inputText" id="cidade"/>
+        <input type="text" className="inputText" id="bairo"/>
+        <input type="text" className="inputText" id="rua"/>
+        <input type="text" className="inputText" id="número"/>
+        <input type="text" className="inputText" id="complemento"/>
+      </form>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
