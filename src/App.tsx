@@ -6,10 +6,10 @@ import "./App.css";
 function App() {
   const [cep, setCep] = useState<string>()
 
-
   useEffect(()=>{
     const fetchData = async () => {
       try{
+        console.log(cep)
         const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
         const result = await response.json();
         console.log(result)
@@ -41,13 +41,38 @@ function App() {
           onChange={handleCepChange}
           placeholder="cep"
           maxLength={8}/>
-        <input type="text" className="inputText" id="pais"/>
-        <input type="text" className="inputText" id="estado"/>
-        <input type="text" className="inputText" id="cidade"/>
-        <input type="text" className="inputText" id="bairo"/>
-        <input type="text" className="inputText" id="rua"/>
-        <input type="text" className="inputText" id="número"/>
-        <input type="text" className="inputText" id="complemento"/>
+        <input 
+          type="text" 
+          className="inputText" 
+          id="estado"
+          placeholder="Estado"
+          />
+        <input 
+          type="text" 
+          className="inputText" 
+          id="cidade"
+          placeholder="cidade"
+          />
+        <input 
+          type="text" 
+          className="inputText" 
+          id="bairo"
+          placeholder="bairro"/>
+        <input 
+          type="text" 
+          className="inputText" 
+          id="rua"
+          placeholder="logradouro"/>
+        <input 
+          type="text" 
+          className="inputText" 
+          id="número"
+          placeholder="número"/>
+        <input 
+          type="text" 
+          className="inputText" 
+          id="complemento"
+          placeholder="complemento"/>
       </form>
     </>
   );
