@@ -1,17 +1,33 @@
 import React from 'react';
-
+import type {FormState} from '../../core/types'
+// Define the shape of the form state (all fields that can be edited)
 interface EditableInputProps {
-  label: string;
-  fieldName: keyof FormState; // Uses the field name from the FormState interface
+  id: keyof FormState;
+  placeHolder: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  isReadOnly: boolean;
+  isReadOnly?: boolean;
 }
 
 
-const EditableInput = ()=>{
+const EditableInput = ({
+  id,
+  placeHolder = '',
+  value,
+  onChange,
+  isReadOnly = false
+}:EditableInputProps)=>{
 
-    return <></>
+    return (
+      <input 
+        id={id}
+        type="text" 
+        placeholder={placeHolder}
+        value={value}
+        onChange={onChange}
+        readOnly={isReadOnly}
+        />
+    )
 }
 
 

@@ -1,13 +1,28 @@
-import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
+import type { FormState, ReadOnlyStatus } from "./core/types";
+import EditableInput from "./components/EditableInput";
+// Define the shape of the form state (all fields that can be edited)
 
-function App() {
-  const [cep, setCep] = useState<string>()
+const INITIAL_FORM_STATE: FormState = {
+  numero: '',
+  cep: '',
+  complemento: '',
+  estado: '',
+  localidade: '',
+  bairro: '',
+  logradouro: ''  
+  
+};
 
-  useEffect(()=>{
-    const fetchData = async () => {
+const INITIAL_READ_ONLY_STATUS:ReadOnlyStatus = {
+  estado: false,
+  localidade: false,
+  bairro: false,
+  logradouro: false 
+}
+
+const fetchData = async (cep:string) => {
       try{
         console.log(cep)
         const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
@@ -19,21 +34,43 @@ function App() {
         console.log(e)
       }
     }
-    fetchData();
+
+
+function App() {
+  const [cep, setCep] = useState<string>()
+  const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE);
+  const [readOnlyStatus, setReadOnlyStatus] = useState<ReadOnlyStatus>(INITIAL_READ_ONLY_STATUS)
+
+
+  useEffect(()=>{
+    
 
   }, [cep])
 
-  const handleCepChange = (e)=>{
-    const value = e.target.value
+  const handleCepChange = async (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const cep = e.target.value.replace(/\D/g,'');
+    setFormState(prev=> ({...prev, cep}))
+    setReadOnlyStatus(INITIAL_READ_ONLY_STATUS)
     console.log(e.target.value)
-    if (value.length === 8){
-      setCep(value)
+    if (cep.length === 8){
+      setCep(cep)
     }
   } 
-
+  const handleInputChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
+    const {id, value} = e.target
+    console.log(id, value)
+    setFormState(prev => ({
+      ...prev,
+      [id as keyof FormState]: value
+    }))
+    console.log(formState)
+  },[]);  
+  
   return (
     <>
       <form action="" className="endereco">
+        
+        
         <input 
           type="text" 
           className="inputText" 
@@ -41,28 +78,41 @@ function App() {
           onChange={handleCepChange}
           placeholder="cep"
           maxLength={8}/>
-        <input 
-          type="text" 
-          className="inputText" 
+        
+        <EditableInput
           id="estado"
-          placeholder="Estado"
-          />
-        <input 
-          type="text" 
-          className="inputText" 
-          id="cidade"
-          placeholder="cidade"
-          />
-        <input 
-          type="text" 
-          className="inputText" 
-          id="bairo"
-          placeholder="bairro"/>
-        <input 
-          type="text" 
-          className="inputText" 
-          id="rua"
-          placeholder="logradouro"/>
+          placeHolder="Estado"
+          value={formState.estado}
+          onChange={handleInputChange}
+          isReadOnly={readOnlyStatus.estado}
+
+        />
+
+        <EditableInput
+          id="localidade"
+          placeHolder="Cidade/Localidade"
+          value={formState.localidade}
+          onChange={handleInputChange}
+          isReadOnly={readOnlyStatus.localidade}
+
+        />
+
+        <EditableInput
+          id="bairro"
+          placeHolder="Bairro"
+          value={formState.bairro}
+          onChange={handleInputChange}
+          isReadOnly={readOnlyStatus.bairro}
+
+        />
+        <EditableInput
+          id="logradouro"
+          placeHolder="Logradouro"
+          value={formState. logradouro}
+          onChange={handleInputChange}
+          isReadOnly={readOnlyStatus.logradouro}
+
+        />
         <input 
           type="text" 
           className="inputText" 

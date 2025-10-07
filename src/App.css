@@ -4,3 +4,9 @@
   padding: 2rem;
   text-align: center;
 }
+
+.endereco{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
