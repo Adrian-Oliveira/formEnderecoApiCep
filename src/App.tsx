@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import "./App.css";
+import axios from "axios";
 import type { FormState, ReadOnlyStatus } from "./core/types";
 import EditableInput from "./components/EditableInput";
 // Define the shape of the form state (all fields that can be edited)
@@ -42,10 +43,6 @@ function App() {
   const [readOnlyStatus, setReadOnlyStatus] = useState<ReadOnlyStatus>(INITIAL_READ_ONLY_STATUS)
 
 
-  useEffect(()=>{
-    
-
-  }, [cep])
 
   const handleCepChange = async (e:React.ChangeEvent<HTMLInputElement>)=>{
     const cep = e.target.value.replace(/\D/g,'');
@@ -54,6 +51,33 @@ function App() {
     console.log(e.target.value)
     if (cep.length === 8){
       setCep(cep)
+      try{
+        let response= await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+        let data = response.data
+        setFormState((prev)=>({
+          ...prev,
+          estado: data.estado,
+          localidade: data.localidade,
+          bairro: data.bairro,
+          logradouro: data.logradouro
+        }))
+
+        setReadOnlyStatus({
+          estado: !!data.estado,
+          localidade: !!data.localidade,
+          bairro: !!data.bairro,
+          logradouro: !!data.logradouro
+        
+        })
+        console.log(data)
+      }
+      catch{
+        setFormState(prev => ({
+          ...prev,
+          estado: '', cidade: '', bairro: '', logradouro: ''
+        }));
+        setReadOnlyStatus(INITIAL_READ_ONLY_STATUS);
+      }
     }
   } 
   const handleInputChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
@@ -63,20 +87,18 @@ function App() {
       ...prev,
       [id as keyof FormState]: value
     }))
-    console.log(formState)
   },[]);  
-  
+
   return (
     <>
       <form action="" className="endereco">
-        
-        
+                
         <input 
           type="text" 
           className="inputText" 
           id="cep" 
           onChange={handleCepChange}
-          placeholder="cep"
+          placeholder="Cep"
           maxLength={8}/>
         
         <EditableInput
@@ -116,13 +138,15 @@ function App() {
         <input 
           type="text" 
           className="inputText" 
-          id="número"
-          placeholder="número"/>
+          id="numero"
+          onChange={handleInputChange}
+          placeholder="Número"/>
         <input 
           type="text" 
           className="inputText" 
           id="complemento"
-          placeholder="complemento"/>
+          onChange={handleInputChange}
+          placeholder="Complemento"/>
       </form>
     </>
   );
