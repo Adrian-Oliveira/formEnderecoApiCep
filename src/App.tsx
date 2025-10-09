@@ -38,24 +38,31 @@ const fetchData = async (cep:string) => {
 
 
 function App() {
-  const [cep, setCep] = useState<string>()
   const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE);
   const [readOnlyStatus, setReadOnlyStatus] = useState<ReadOnlyStatus>(INITIAL_READ_ONLY_STATUS)
 
 
-
   const handleCepChange = async (e:React.ChangeEvent<HTMLInputElement>)=>{
     const cep = e.target.value.replace(/\D/g,'');
-    setFormState(prev=> ({...prev, cep}))
+
+    let formattedCep = cep;
+    if (cep.length > 5) {
+      formattedCep = cep.substring(0, 5) + '-' + cep.substring(5, 8); 
+    }
+    console.log(cep, formattedCep)
+    setFormState(prev => ({ ...prev, cep:formattedCep }));
+    
+    /* setFormState(prev=> ({...prev, cep})) */
     setReadOnlyStatus(INITIAL_READ_ONLY_STATUS)
-    console.log(e.target.value)
+
+
     if (cep.length === 8){
-      setCep(cep)
       try{
         let response= await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
         let data = response.data
         setFormState((prev)=>({
           ...prev,
+          cep:formattedCep,
           estado: data.estado,
           localidade: data.localidade,
           bairro: data.bairro,
@@ -74,6 +81,7 @@ function App() {
       catch{
         setFormState(prev => ({
           ...prev,
+          cep:formattedCep,
           estado: '', cidade: '', bairro: '', logradouro: ''
         }));
         setReadOnlyStatus(INITIAL_READ_ONLY_STATUS);
@@ -98,8 +106,9 @@ function App() {
           className="inputText" 
           id="cep" 
           onChange={handleCepChange}
+          value={formState.cep}
           placeholder="Cep"
-          maxLength={8}/>
+          maxLength={9}/>
         
         <EditableInput
           id="estado"
