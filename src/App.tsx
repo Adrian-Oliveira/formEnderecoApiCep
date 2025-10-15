@@ -98,12 +98,14 @@ function App() {
 
 
   const handleNumberChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
-    const {id, value} = e.target
+    let {id, value} = e.target
+
     setFormState(prev => ({
       ...prev,
-      [id as keyof FormState]: value
+      [id as keyof FormState]: value.replace(/\D/g,'').replace(/^0+/, '')
     }))
   },[]); 
+
   return (
     <>
       <form action="" className="endereco">
@@ -158,13 +160,17 @@ function App() {
           className="inputText" 
           id="numero"
           onChange={handleNumberChange}
+          value={formState.numero}
+          maxLength={6}
           placeholder="Número"
           required
-          />
+        />
+
         <input 
           type="text" 
           className="inputText" 
           id="complemento"
+          value={formState.complemento}
           onChange={handleInputChange}
           placeholder="Complemento"
           />
