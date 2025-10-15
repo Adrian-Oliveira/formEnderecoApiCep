@@ -23,19 +23,6 @@ const INITIAL_READ_ONLY_STATUS:ReadOnlyStatus = {
   logradouro: false 
 }
 
-const fetchData = async (cep:string) => {
-      try{
-        console.log(cep)
-        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
-        const result = await response.json();
-        console.log(result)
-        
-      }
-      catch(e){
-        console.log(e)
-      }
-    }
-
 
 function App() {
   const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE);
