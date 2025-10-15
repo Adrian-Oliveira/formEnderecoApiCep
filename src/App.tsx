@@ -90,13 +90,20 @@ function App() {
   } 
   const handleInputChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
     const {id, value} = e.target
-    console.log(id, value)
     setFormState(prev => ({
       ...prev,
       [id as keyof FormState]: value
     }))
-  },[]);  
+  },[]); 
 
+
+  const handleNumberChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
+    const {id, value} = e.target
+    setFormState(prev => ({
+      ...prev,
+      [id as keyof FormState]: value
+    }))
+  },[]); 
   return (
     <>
       <form action="" className="endereco">
@@ -108,7 +115,9 @@ function App() {
           onChange={handleCepChange}
           value={formState.cep}
           placeholder="Cep"
-          maxLength={9}/>
+          maxLength={9}
+          required
+          />
         
         <EditableInput
           id="estado"
@@ -148,14 +157,17 @@ function App() {
           type="text" 
           className="inputText" 
           id="numero"
-          onChange={handleInputChange}
-          placeholder="Número"/>
+          onChange={handleNumberChange}
+          placeholder="Número"
+          required
+          />
         <input 
           type="text" 
           className="inputText" 
           id="complemento"
           onChange={handleInputChange}
-          placeholder="Complemento"/>
+          placeholder="Complemento"
+          />
       </form>
     </>
   );

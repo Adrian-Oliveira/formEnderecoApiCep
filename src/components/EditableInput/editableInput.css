@@ -1,0 +1,5 @@
+.editableInput:required:invalid{
+    border: 2px solid #e74c3c; 
+    background-color: #fceae8;
+
+}

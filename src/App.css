@@ -10,3 +10,8 @@
   flex-direction: column;
   gap: 10px;
 }
+
+input:required:invalid{
+  border: 2px solid #e74c3c; 
+  background-color: #fceae8;
+}
